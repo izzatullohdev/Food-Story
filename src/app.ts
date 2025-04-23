@@ -15,7 +15,13 @@ import priceRequestRoutes from "./routes/priceRequestRoutes";
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // ⭐️ Barcha domenlarga ruxsat
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    // allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(helmet());
 app.use(compression());
 app.use(morgan("dev"));
