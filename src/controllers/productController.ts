@@ -19,45 +19,30 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
 
 export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
-    try {
-      const { title, price, category, description } = req.body;
-      const result = await new Promise<{ secure_url: string }>(
-        (resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "products" },
-            (error, result) => {
-              if (error || !result)
-                return reject(
-                  error || new Error("Cloudinary yuklashda xatolik")
-                );
-              resolve({ secure_url: result.secure_url });
-            }
-          );
+    const { title, description, price, category, image } = req.body;
 
-          if (!req.file) {
-            throw new CustomError(400, "Rasm fayli yuborilmadi");
-          }
-          stream.end(req.file.buffer);
-        }
-      );
-
-      const created = await Product.create({
-        title,
-        price: parseFloat(price),
-        category,
-        description,
-        image: result.secure_url,
-      });
-
-      sendResponse(res, {
-        statusCode: 201,
-        message: "Mahsulot yaratildi",
-        data: created,
-      });
-    } catch (err: any) {
-      console.error("❌ CREATE PRODUCT ERROR:", err);
-      throw new CustomError(500, "Serverda kutilmagan xatolik");
+    if (!image.startsWith("data:image/")) {
+      throw new CustomError(400, "Rasm noto‘g‘ri formatda");
     }
+
+    const uploaded = await cloudinary.uploader.upload(image, {
+      folder: "products",
+      resource_type: "image",
+    });
+
+    const product = await Product.create({
+      title,
+      description,
+      price: parseFloat(price),
+      category,
+      image: uploaded.secure_url,
+    });
+
+    sendResponse(res, {
+      statusCode: 201,
+      message: "Mahsulot yaratildi",
+      data: product,
+    });
   }
 );
 
