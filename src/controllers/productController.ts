@@ -21,8 +21,6 @@ export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
     const { title, description, price, category, image } = req.body;
 
-    console.log("💡 REQUEST BODY:", req.body);
-
     // 1. Image validatsiya
     if (
       !image ||
