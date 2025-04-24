@@ -21,11 +21,6 @@ export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
     try {
       const { title, price, category, description } = req.body;
-
-      if (!req.file) {
-        throw new CustomError(400, "Rasm fayli yuborilmadi");
-      }
-
       const result = await new Promise<{ secure_url: string }>(
         (resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(

@@ -1,26 +1,26 @@
 import multer from "multer";
+import { Request } from "express";
 
-// 🧠 Faylni RAMda saqlaymiz (hard diskga yozilmaydi)
+// RAMda saqlash
 const storage = multer.memoryStorage();
 
-// ✅ Filter — faqat rasm fayllar
+// Faqat rasm fayllar
 const fileFilter = (
-  req: Express.Request,
+  req: Request,
   file: Express.Multer.File,
-  cb: any
+  cb: multer.FileFilterCallback
 ) => {
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
-    cb(new Error("Faqat rasm fayllar ruxsat etiladi!"), false);
+    cb(new Error("❌ Faqat rasm fayllarga ruxsat etiladi!"));
   }
 };
 
-// 🔧 Limitlar va sozlamalar
 export const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 30 * 1024 * 1024, //
+    fileSize: 30 * 1024 * 1024, // 30 MB
   },
 });
