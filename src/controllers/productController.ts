@@ -20,17 +20,31 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
 export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
     const { title, description, price, category, image } = req.body;
+
     console.log("💡 REQUEST BODY:", req.body);
-    console.log("💡 REQUEST FILE:", req.file);
-    if (!image.startsWith("data:image/")) {
-      throw new CustomError(400, "Rasm noto‘g‘ri formatda");
+
+    // 1. Image validatsiya
+    if (
+      !image ||
+      typeof image !== "string" ||
+      !image.startsWith("data:image/")
+    ) {
+      throw new CustomError(400, "Rasm noto‘g‘ri formatda yoki mavjud emas");
     }
 
-    const uploaded = await cloudinary.uploader.upload(image, {
-      folder: "products",
-      resource_type: "image",
-    });
+    // 2. Rasmni Cloudinaryga yuklash
+    let uploaded;
+    try {
+      uploaded = await cloudinary.uploader.upload(image, {
+        folder: "products",
+        resource_type: "image",
+      });
+    } catch (err) {
+      console.error("❌ Cloudinary error:", err);
+      throw new CustomError(500, "Rasm yuklanmadi");
+    }
 
+    // 3. Mahsulotni yaratish
     const product = await Product.create({
       title,
       description,
