@@ -20,7 +20,8 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
 export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
     const { title, description, price, category, image } = req.body;
-
+    console.log("💡 REQUEST BODY:", req.body);
+    console.log("💡 REQUEST FILE:", req.file);
     if (!image.startsWith("data:image/")) {
       throw new CustomError(400, "Rasm noto‘g‘ri formatda");
     }

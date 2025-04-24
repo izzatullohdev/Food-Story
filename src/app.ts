@@ -17,9 +17,9 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*", // ⭐️ Barcha domenlarga ruxsat
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    // allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type"],
   })
 );
 app.use(helmet());
