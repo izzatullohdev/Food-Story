@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { Category } from "../models/Category";
 import { asyncHandler } from "../utils/asyncHandler";
 import { sendResponse } from "../utils/response";

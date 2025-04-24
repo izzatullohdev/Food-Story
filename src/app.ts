@@ -12,6 +12,7 @@ import categoryRoutes from "./routes/categoryRoutes";
 import partnerRoutes from "./routes/partnerRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import priceRequestRoutes from "./routes/priceRequestRoutes";
+import callmeRequestRouter from "./routes/callmeRouters";
 dotenv.config();
 const app = express();
 
@@ -31,7 +32,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/partners", partnerRoutes);
 app.use("/api/contact", contactRoutes);
-
+app.use("/api/callme", callmeRequestRouter);
 app.use("/api/price-request", priceRequestRoutes);
 
 // Default route
