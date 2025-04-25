@@ -31,24 +31,29 @@ export const createProduct = asyncHandler(
     }
 
     // 2. Rasmni Cloudinaryga yuklash
-    let uploaded;
-    try {
-      uploaded = await cloudinary.uploader.upload(image, {
-        folder: "products",
-        resource_type: "image",
-      });
-    } catch (err) {
-      console.error("❌ Cloudinary error:", err);
-      throw new CustomError(500, "Rasm yuklanmadi");
-    }
-
+    const result = await new Promise<{ secure_url: string }>(
+      (resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "products" },
+          (err, result) => {
+            if (err || !result)
+              return reject(err || new Error("Rasm yuklanmadi"));
+            resolve({ secure_url: result.secure_url });
+          }
+        );
+        if (!req.file) {
+          throw new CustomError(400, "Rasm yuborilmadi");
+        }
+        stream.end(req.file.buffer);
+      }
+    );
     // 3. Mahsulotni yaratish
     const product = await Product.create({
       title,
       description,
       price: parseFloat(price),
       category,
-      image: uploaded.secure_url,
+      image: result.secure_url,
     });
 
     sendResponse(res, {
