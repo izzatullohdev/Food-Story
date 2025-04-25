@@ -22,14 +22,9 @@ export const createProduct = asyncHandler(
     const { title, description, price, category, image } = req.body;
 
     // 1. Image validatsiya
-    if (
-      !image ||
-      typeof image !== "string" ||
-      !image.startsWith("data:image/")
-    ) {
-      throw new CustomError(400, "Rasm noto‘g‘ri formatda yoki mavjud emas");
-    }
-
+     if (!req.file) {
+       throw new CustomError(400, "Rasm yuborilmadi");
+     }
     // 2. Rasmni Cloudinaryga yuklash
     const result = await new Promise<{ secure_url: string }>(
       (resolve, reject) => {
