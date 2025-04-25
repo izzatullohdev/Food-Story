@@ -13,6 +13,7 @@ import partnerRoutes from "./routes/partnerRoutes";
 import contactRoutes from "./routes/contactRoutes";
 import priceRequestRoutes from "./routes/priceRequestRoutes";
 import callmeRequestRouter from "./routes/callmeRouters";
+import callMeRoutes from "./routes/contactUsRRouter";
 dotenv.config();
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/partners", partnerRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/callme", callmeRequestRouter);
 app.use("/api/price-request", priceRequestRoutes);
+app.use("/api/contact-us", callMeRoutes);
 
 // Default route
 app.get("/", (_req, res) => {
