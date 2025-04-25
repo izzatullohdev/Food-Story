@@ -16,6 +16,8 @@ export const createCallMeRequest = asyncHandler(
   }
 );
 
+// @route All Contact US
+//@decription  GET /api/contact-us
 export const getCallMeRequests = asyncHandler(
   async (_req: Request, res: Response) => {
     const items = await contactUs.find().sort({ createdAt: -1 });
@@ -23,6 +25,17 @@ export const getCallMeRequests = asyncHandler(
     sendResponse(res, {
       message: "Barcha so‘rovlar",
       data: items,
+    });
+  }
+);
+export const deleteCallMeRequest = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    if (!id) throw new Error("ID noto‘g‘ri");
+    const deleted = await contactUs.findByIdAndDelete(id);
+    sendResponse(res, {
+      message: "So‘rov o‘chirildi",
+      data: deleted,
     });
   }
 );
