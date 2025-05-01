@@ -19,12 +19,13 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
 
 export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
-    const { title, description, price, category, image } = req.body;
+    const { title, description, price, category, image, title2, description2 } =
+      req.body;
 
     // 1. Image validatsiya
-     if (!req.file) {
-       throw new CustomError(400, "Rasm yuborilmadi");
-     }
+    if (!req.file) {
+      throw new CustomError(400, "Rasm yuborilmadi");
+    }
     // 2. Rasmni Cloudinaryga yuklash
     const result = await new Promise<{ secure_url: string }>(
       (resolve, reject) => {
@@ -49,6 +50,8 @@ export const createProduct = asyncHandler(
       price: parseFloat(price),
       category,
       image: result.secure_url,
+      title2,
+      description2,
     });
 
     sendResponse(res, {
