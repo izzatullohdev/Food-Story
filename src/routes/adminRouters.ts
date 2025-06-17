@@ -7,6 +7,6 @@ import {
 const router = Router();
 
 router.post("/", createAdmin);
-router.get("/", Login);
+router.post("/login", Login);
 router.put("/:username", updateAdmin);
 export default router;
